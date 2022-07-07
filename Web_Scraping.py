@@ -19,8 +19,8 @@ try:
 
         for row in table:
             book = {}    
-            book["title"] = row.find_all_next("h3")[0].string
-            #removing the euro dollar sign
+            title = row.find("img")
+            book["title"] = title["alt"]
             book["price"] = row.find("p", class_ = "price_color").string[1:]
             rate = row.find(class_ = "star-rating")
             book["rating"] = rate["class"][1] + " Star"
