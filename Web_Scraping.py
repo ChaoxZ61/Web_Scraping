@@ -17,8 +17,6 @@ try:
         soup = BeautifulSoup(html,'html.parser')
         table = soup.find_all("article", class_ = "product_pod")
 
-
-
         for row in table:
             book = {}    
             book["title"] = row.find_all_next("h3")[0].string
