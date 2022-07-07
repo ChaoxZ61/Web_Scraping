@@ -12,24 +12,23 @@ books = []
 
 
 try:
-    html = getHTML(f"http://books.toscrape.com")
-
-    soup = BeautifulSoup(html,'html.parser')
-
-    table = soup.find("article", class_ = "product_pod")
-
+    for i in range(51):
+        html = getHTML(f"https://books.toscrape.com/catalogue/page-{i}.html")
+        soup = BeautifulSoup(html,'html.parser')
+        table = soup.find_all("article", class_ = "product_pod")
 
 
-    for row in table.find_all_next("article", class_ = "product_pod"):
-        book = {}    
-        book["title"] = row.find_all_next("h3")[0].string
-        #removing the euro dollar sign
-        book["price"] = row.find("p", class_ = "price_color").string[2:]
-        rate = row.find(class_ = "star-rating")
-        book["rating"] = rate["class"][1] + " Star"
-        books.append(book)
 
-    with open("books.csv","w") as bookCSV:
+        for row in table:
+            book = {}    
+            book["title"] = row.find_all_next("h3")[0].string
+            #removing the euro dollar sign
+            book["price"] = row.find("p", class_ = "price_color").string[1:]
+            rate = row.find(class_ = "star-rating")
+            book["rating"] = rate["class"][1] + " Star"
+            books.append(book)
+        
+    with open("books.csv","w", encoding="utf-8") as bookCSV:
         newCSV = csv.DictWriter(bookCSV, fieldnames=books[0].keys())
         newCSV.writeheader()
         newCSV.writerows(books)
